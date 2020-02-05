@@ -15,15 +15,17 @@
                     label-for="address">
         <b-form-input id="address"
                       v-model="address"
+                      :state="hasAddress"
                       type="text"
                       name="address" />
       </b-form-group>
-      
+
       <b-form-group label="Rate"
                     label-for="rate">
         <b-input-group>
           <b-form-input id="rate"
                         v-model="rate"
+                        :state="hasRate"
                         type="number"
                         name="rate"/>
           <b-input-group-append>
@@ -53,15 +55,16 @@
           </b-input-group-prepend>
           <b-form-input id="loan_amount_dollars"
                         v-model="loan_amount_dollars"
+                        :state="hasLoan"
                         type="number"
                         name="loan_amount_dollars"/>
         </b-input-group>
       </b-form-group>
 
-      <b-button type="submit" variant="primary">Submit</b-button>
+      <b-button :disabled="disableSubmit" type="submit" variant="primary">Submit</b-button>
 
     </b-form>
-      
+
   </b-container>
 </template>
 
@@ -84,9 +87,26 @@ export default {
       loan_amount_dollars: 100000
     }
   },
+  computed: {
+    hasAddress() {
+      return this.address.trim().length > 3
+    },
+    hasRate() {
+      return this.rate >= 5
+    },
+    hasLoan() {
+      return this.loan_amount_dollars > 50000
+    },
+    disableSubmit() {
+      return !this.hasAddress || !this.hasRate || !this.hasLoan
+    }
+  },
   methods: {
     async onSubmit(ev) {
       ev.preventDefault()
+      if (this.disableSubmit) {
+        return
+      }
       let { address, rate, expected_term_months, loan_amount_dollars } = this
       let b = {
         purpose: this.purpose.value,
