@@ -9,12 +9,12 @@
       :sort-desc.sync="sortDesc"
       stacked="sm"
     >
-      <template slot="address" scope="funding">
+      <template slot="address" slot-scope="funding">
         <nuxt-link :to="'/investment/' + funding.item.id">{{ funding.item.address }}</nuxt-link>
       </template>
       <template
         slot="created_on"
-        scope="funding"
+        slot-scope="funding"
       >{{ new Date(funding.item.created_on).toLocaleDateString() }}</template>
     </b-table>
   </b-container>
